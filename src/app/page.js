@@ -8,6 +8,6 @@ function MyApp({ Component, pageProps }) {
   }, []);
   return <>
     <Navbar />
-  </>
+</>
 }
 export default MyApp;
