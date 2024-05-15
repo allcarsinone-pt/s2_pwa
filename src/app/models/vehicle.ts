@@ -1,7 +1,7 @@
 export interface VehicleModel {
-    vehicleId: number;
+    id: number;
     standid: number;
-    brandid: number;
+    brandname: string;
     gastypeid: number;
     model: string;
     year: number;
