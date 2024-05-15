@@ -15,3 +15,8 @@ export const insertVehicles = async (vehicle: VehicleModel): Promise<VehicleMode
     const { data } = await axios.post('http://localhost:3003/vehicles/', vehicle)
     return data
 }
+
+export const updateVehicle = async (vehicle: VehicleModel): Promise<VehicleModel> => {
+    const { data } = await axios.put(`http://localhost:3003/vehicles/edit`, vehicle)
+    return data
+}
