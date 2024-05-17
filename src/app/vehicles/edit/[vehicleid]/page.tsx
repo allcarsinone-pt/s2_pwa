@@ -5,6 +5,7 @@ import { fetchSingleVehicle, updateVehicle } from "../../../api/vehiclesAPI";
 import { VehicleModel } from "../../../models/vehicle";
 import Navbar from "../../../components/navbar";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Link from "next/link";
 const EditVehiclesPage: React.FC = () => {
 
     const { data: vehicleData, error, isLoading } = useQuery<VehicleModel>({
@@ -52,6 +53,30 @@ const EditVehiclesPage: React.FC = () => {
         });
     };
 
+    const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        try {
+            const updatedFormData = {
+                vehicleid: formData.id,
+                standid: formData.standid,
+                brandid: formData.brandid,
+                gastypeid: formData.gastypeid,
+                model: formData.model,
+                year: formData.year,
+                price: formData.price,
+                mileage: formData.mileage,
+                availability: formData.availability,
+                description: formData.description
+            };
+            const response = await updateVehicle(updatedFormData);
+
+            if (response) (
+                <Link href={`vehicles`} />
+            )
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     return <>
         <>
@@ -59,7 +84,7 @@ const EditVehiclesPage: React.FC = () => {
             <p></p>
             <div className="container mt-6">
                 <h1>Edit Vehicle</h1>
-                <form>
+                <form onSubmit={handleOnSubmit}>
                     <div className="form-group">
                         <label htmlFor="brandname">Brand</label>
                         <input type="text" className="form-control" name="brandname" id="brandname" value={formData.brandname} onChange={handleInputChange} />
@@ -91,8 +116,11 @@ const EditVehiclesPage: React.FC = () => {
                             <option value="false">Not Available</option>
                         </select>
                     </div>
-                    <p></p>
-                    <button id="updateVehicleButton" type="submit" className="btn btn-primary">Submit</button>
+                    <input type="hidden" name="vehicleid" value={formData.id} id="vehicleid" />
+                    <input type="hidden" name="standid" value={formData.standid} id="standid" />
+                    <input type="hidden" name="brandid" value={formData.brandid} id="brandid" />
+                    <input type="hidden" name="gastypeid" value={formData.gastypeid} id="gastypeid" />
+                    <button type="submit" className="btn btn-primary">Submit</button>
 
                 </form>
             </div>
