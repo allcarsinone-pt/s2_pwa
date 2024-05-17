@@ -71,9 +71,6 @@ const EditVehiclesPage: React.FC = () => {
             const response = await updateVehicle(updatedFormData);
 
             console.log(response);
-            if (response) (
-                <Link href={`vehicles`} />
-            )
         } catch (error) {
             console.error(error);
         }
@@ -88,7 +85,7 @@ const EditVehiclesPage: React.FC = () => {
                 <form onSubmit={handleOnSubmit}>
                     <div className="form-group">
                         <label htmlFor="brandname">Brand</label>
-                        <input type="text" className="form-control" name="brandname" id="brandname" value={formData.brandname} onChange={handleInputChange} />
+                        <input type="text" className="form-control" name="brandname" id="brandname" value={formData.brandname} onChange={handleInputChange} disabled />
                     </div>
                     <div className="form-group">
                         <label htmlFor="model">Model</label>
