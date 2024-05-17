@@ -9,7 +9,7 @@ const EditVehiclesPage: React.FC = () => {
 
     const { data: vehicleData, error, isLoading } = useQuery<VehicleModel>({
         queryKey: ['vehicles'],
-        queryFn: () => fetchSingleVehicle(1)
+        queryFn: () => fetchSingleVehicle(Number(window.location.pathname.split("/").pop()))
     })
 
     const [formData, setFormData] = useState<VehicleModel>({
@@ -42,6 +42,16 @@ const EditVehiclesPage: React.FC = () => {
             [name]: value
         }));
     }
+
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        // Converter boolean em string
+        setFormData({
+            ...formData,
+            [name]: value === 'true',
+        });
+    };
+
 
     return <>
         <>
@@ -76,7 +86,10 @@ const EditVehiclesPage: React.FC = () => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="availability">Availability</label>
-                        <input type="text" className="form-control" name="availability" id="availability" value={formData.availability ? "true" : "false"} onChange={handleInputChange} />
+                        <select className="form-control" name="availability" id="availability" value={String(formData.availability)} onChange={(e) => handleSelectChange(e)}>
+                            <option value="true">Available</option>
+                            <option value="false">Not Available</option>
+                        </select>
                     </div>
                     <p></p>
                     <button id="updateVehicleButton" type="submit" className="btn btn-primary">Submit</button>
