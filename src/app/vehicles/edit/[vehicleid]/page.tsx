@@ -70,6 +70,7 @@ const EditVehiclesPage: React.FC = () => {
             };
             const response = await updateVehicle(updatedFormData);
 
+            console.log(response);
             if (response) (
                 <Link href={`vehicles`} />
             )
@@ -117,9 +118,9 @@ const EditVehiclesPage: React.FC = () => {
                         </select>
                     </div>
                     <input type="hidden" name="vehicleid" value={formData.id} id="vehicleid" />
-                    <input type="hidden" name="standid" value={formData.standid} id="standid" />
-                    <input type="hidden" name="brandid" value={formData.brandid} id="brandid" />
-                    <input type="hidden" name="gastypeid" value={formData.gastypeid} id="gastypeid" />
+                    <input type="hidden" name="standid" value='1' id="standid" />
+                    <input type="hidden" name="brandid" value='1' id="brandid" />
+                    <input type="hidden" name="gastypeid" value='1' id="gastypeid" />
                     <button type="submit" className="btn btn-primary">Submit</button>
 
                 </form>
