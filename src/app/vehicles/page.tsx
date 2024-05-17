@@ -59,8 +59,8 @@ const VehiclesPage: React.FC = () => {
                 <td>{vehicle.availability ? 'Available' : 'Unavailable'}</td>
                 <td>
                   <Link href={`vehicles/${vehicle.id}`}><FontAwesomeIcon icon={faEye} /></Link>&nbsp;&nbsp;
-                  <Link href={`vehicles/edit/${vehicle.id}`}><FontAwesomeIcon icon={faEdit} /></Link>&nbsp;&nbsp;
-                  <Link href={`vehicles/${vehicle.id}`}><FontAwesomeIcon icon={faTrash} /></Link>
+                  <Link href={`vehicles/edit/${vehicle.id}`}><FontAwesomeIcon icon={faEdit} color="black" /></Link>&nbsp;&nbsp;
+                  <Link href={`vehicles/${vehicle.id}`}><FontAwesomeIcon icon={faTrash} color="darkred" /></Link>
                 </td>
               </tr>
             ))}
