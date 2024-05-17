@@ -60,7 +60,7 @@ const VehiclesPage: React.FC = () => {
                 <td>
                   <Link href={`vehicles/${vehicle.id}`}><FontAwesomeIcon icon={faEye} /></Link>&nbsp;&nbsp;
                   <Link href={`vehicles/edit/${vehicle.id}`}><FontAwesomeIcon icon={faEdit} color="black" /></Link>&nbsp;&nbsp;
-                  <Link href={`vehicles/${vehicle.id}`}><FontAwesomeIcon icon={faTrash} color="darkred" /></Link>
+                  <Link href={`#`}><FontAwesomeIcon icon={faTrash} color="darkred" /></Link>
                 </td>
               </tr>
             ))}
