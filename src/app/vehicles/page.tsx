@@ -16,8 +16,11 @@ const VehiclesPage: React.FC = () => {
 
   const { data, error, isLoading } = useQuery<VehicleModel[]>({
     queryKey: ['vehicles'],
-    queryFn: fetchVehicles
+    queryFn: fetchVehicles,
+    staleTime: 10000
   });
+
+
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading data: {error.message}</div>;

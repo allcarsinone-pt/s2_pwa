@@ -11,7 +11,8 @@ const VehiclesSinglePage: React.FC = () => {
 
     const { data: vehicleData, error, isLoading } = useQuery<VehicleModel>({
         queryKey: ['vehicles'],
-        queryFn: () => fetchSingleVehicle(Number(window.location.pathname.split("/").pop()))
+        queryFn: () => fetchSingleVehicle(Number(window.location.pathname.split("/").pop())),
+        staleTime: 10000
     })
 
     const [formData, setFormData] = useState<VehicleModel>({
