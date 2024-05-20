@@ -69,8 +69,7 @@ const EditVehiclesPage: React.FC = () => {
                 description: formData.description
             };
             const response = await updateVehicle(updatedFormData);
-
-            console.log(response);
+            return response;
         } catch (error) {
             console.error(error);
         }

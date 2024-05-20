@@ -17,10 +17,8 @@ const VehiclesPage: React.FC = () => {
   const { data, error, isLoading } = useQuery<VehicleModel[]>({
     queryKey: ['vehicles'],
     queryFn: fetchVehicles,
-    staleTime: 10000
+    staleTime: 6000000
   });
-
-
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading data: {error.message}</div>;
@@ -63,7 +61,7 @@ const VehiclesPage: React.FC = () => {
                 <td>
                   <Link href={`vehicles/${vehicle.id}`}><FontAwesomeIcon icon={faEye} /></Link>&nbsp;&nbsp;
                   <Link href={`vehicles/edit/${vehicle.id}`}><FontAwesomeIcon icon={faEdit} color="black" /></Link>&nbsp;&nbsp;
-                  <Link href={`#`}><FontAwesomeIcon icon={faTrash} color="darkred" /></Link>
+                  <Link href={'#'}><FontAwesomeIcon icon={faTrash} color="darkred" /></Link>
                 </td>
               </tr>
             ))}
