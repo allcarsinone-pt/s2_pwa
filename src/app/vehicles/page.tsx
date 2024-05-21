@@ -20,7 +20,7 @@ const VehiclesPage: React.FC = () => {
   const { data, error, isLoading } = useQuery<VehicleModel[]>({
     queryKey: ['vehicles'],
     queryFn: fetchVehicles,
-    staleTime: 6000000,
+    staleTime: 6000000
   });
 
   const [showModal, setShowModal] = useState(false);
@@ -40,6 +40,7 @@ const VehiclesPage: React.FC = () => {
     if (selectedVehicle && selectedVehicle.id) {
       let result = deleteVehicle(selectedVehicle.id);
       handleCloseModal();
+      window.location.href = `/vehicles`;
     }
   }
 
@@ -91,7 +92,7 @@ const VehiclesPage: React.FC = () => {
               ))
               ) : (
                 <tr>
-                  <td colSpan={7}>No vehicles found.</td>
+                  <td colSpan={8}>No vehicles found.</td>
                 </tr>
               )}
           </tbody>

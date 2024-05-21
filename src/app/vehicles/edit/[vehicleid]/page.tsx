@@ -68,8 +68,8 @@ const EditVehiclesPage: React.FC = () => {
                 availability: formData.availability,
                 description: formData.description
             };
-            const response = await updateVehicle(updatedFormData);
-            return response;
+            await updateVehicle(updatedFormData);
+            window.location.href = `/vehicles/${formData.id}`;
         } catch (error) {
             console.error(error);
         }
