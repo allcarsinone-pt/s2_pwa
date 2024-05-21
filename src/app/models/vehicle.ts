@@ -12,4 +12,5 @@ export interface VehicleModel {
     mileage: number;
     availability: boolean;
     description: string;
+    photos?: string[];
 }
