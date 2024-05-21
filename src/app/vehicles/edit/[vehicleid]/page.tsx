@@ -108,10 +108,9 @@ const EditVehiclesPage: React.FC = () => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="availability">Availability</label>
-                        <select className="form-control" name="availability" id="availability" value={String(formData.availability)} onChange={(e) => handleSelectChange(e)}>
-                            <option value="true">Available</option>
-                            <option value="false">Not Available</option>
-                        </select>
+                        &nbsp;&nbsp;
+                        {formData.availability ? <input type="checkbox" name="availability" id="availability" /> :
+                            <input type="checkbox" name="availability" id="availability" defaultChecked />}
                     </div>
                     <input type="hidden" name="vehicleid" value={formData.id} id="vehicleid" />
                     <input type="hidden" name="standid" value='1' id="standid" />

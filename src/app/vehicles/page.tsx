@@ -1,29 +1,52 @@
 'use client'
-import { useEffect } from "react";
-import { Query, useQuery } from '@tanstack/react-query';
-import { fetchVehicles } from "../api/vehiclesAPI";
+import { useEffect, useState } from "react";
+import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { deleteVehicle, fetchVehicles } from "../api/vehiclesAPI";
 import { VehicleModel } from "../models/vehicle";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Navbar from "../components/navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 const VehiclesPage: React.FC = () => {
   useEffect(() => {
     import("bootstrap/dist/js/bootstrap");
   }, []);
 
+  const queryClient = useQueryClient();
+
   const { data, error, isLoading } = useQuery<VehicleModel[]>({
     queryKey: ['vehicles'],
     queryFn: fetchVehicles,
-    staleTime: 6000000
+    staleTime: 6000000,
   });
+
+  const [showModal, setShowModal] = useState(false);
+  const [selectedVehicle, setSelectedVehicle] = useState<VehicleModel | null>(null);
+
+  const handleOpenModal = (vehicle: VehicleModel | null) => {
+    setSelectedVehicle(vehicle);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedVehicle(null);
+    setShowModal(false);
+  };
+
+  const handleDeleteVehicle = () => {
+    if (selectedVehicle && selectedVehicle.id) {
+      let result = deleteVehicle(selectedVehicle.id);
+      handleCloseModal();
+    }
+  }
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading data: {error.message}</div>;
 
-  return <>
+  return (
     <>
       <Navbar />
       <div className="container mt-4">
@@ -49,28 +72,51 @@ const VehiclesPage: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {data && data.map((vehicle) => (
-              <tr key={vehicle.id}>
-                <td>{vehicle.brandname}</td>
-                <td>{vehicle.model}</td>
-                <td>{vehicle.year}</td>
-                <td>{vehicle.price}</td>
-                <td>{vehicle.mileage}</td>
-                <td>{vehicle.description}</td>
-                <td>{vehicle.availability ? 'Available' : 'Unavailable'}</td>
-                <td>
-                  <Link href={`vehicles/${vehicle.id}`}><FontAwesomeIcon icon={faEye} /></Link>&nbsp;&nbsp;
-                  <Link href={`vehicles/edit/${vehicle.id}`}><FontAwesomeIcon icon={faEdit} color="black" /></Link>&nbsp;&nbsp;
-                  <Link href={'#'}><FontAwesomeIcon icon={faTrash} color="darkred" /></Link>
-                </td>
-              </tr>
-            ))}
+            {data && data.length > 0 ?
+              (data.map((vehicle) => (
+                <tr key={vehicle.id}>
+                  <td>{vehicle.brandname}</td>
+                  <td>{vehicle.model}</td>
+                  <td>{vehicle.year}</td>
+                  <td>{vehicle.price}</td>
+                  <td>{vehicle.mileage}</td>
+                  <td>{vehicle.description}</td>
+                  <td>{vehicle.availability ? '✓' : '✕'}</td>
+                  <td>
+                    <Link href={`vehicles/${vehicle.id}`}><FontAwesomeIcon icon={faEye} /></Link>&nbsp;&nbsp;
+                    <Link href={`vehicles/edit/${vehicle.id}`}><FontAwesomeIcon icon={faEdit} color="black" /></Link>&nbsp;&nbsp;
+                    <button type="button" style={{ border: 'none', background: 'none', verticalAlign: 'middle' }} className="btn btn-outline-danger btn-no-border p-0" onClick={() => handleOpenModal(vehicle)}><FontAwesomeIcon icon={faTrash} color="darkred" /></button>
+                  </td>
+                </tr>
+              ))
+              ) : (
+                <tr>
+                  <td colSpan={7}>No vehicles found.</td>
+                </tr>
+              )}
           </tbody>
         </table>
       </div>
-    </>
-  </>
 
+      <div className={`modal fade ${showModal ? 'show' : ''}`} style={{ display: showModal ? 'block' : 'none' }} role="dialog">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Deleting {selectedVehicle?.brandname + " " + selectedVehicle?.model}</h5>
+            </div>
+            <div className="modal-body">
+              <p>Are you sure you want to delete this vehicle?</p>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" onClick={handleCloseModal}>Cancel</button>
+              <button type="button" className="btn btn-danger" onClick={handleDeleteVehicle}>Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className={`modal-backdrop fade ${showModal ? 'show' : ''}`} style={{ display: showModal ? 'block' : 'none' }}></div>
+    </>
+  );
 }
 
 const queryClient = new QueryClient();
