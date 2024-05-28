@@ -76,51 +76,49 @@ const EditVehiclesPage: React.FC = () => {
     }
 
     return <>
-        <>
-            <Navbar />
-            <p></p>
-            <div className="container mt-6">
-                <h1>Edit Vehicle</h1>
-                <form onSubmit={handleOnSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="brandname">Brand</label>
-                        <input type="text" className="form-control" name="brandname" id="brandname" value={formData.brandname} onChange={handleInputChange} disabled />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="model">Model</label>
-                        <input type="text" className="form-control" name="model" id="model" value={formData.model} onChange={handleInputChange} />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="year">Year</label>
-                        <input type="text" className="form-control" name="year" id="year" value={formData.year} onChange={handleInputChange} />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="price">Price</label>
-                        <input type="text" className="form-control" name="price" id="price" value={formData.price} onChange={handleInputChange} />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="mileage">Mileage</label>
-                        <input type="text" className="form-control" name="mileage" id="mileage" value={formData.mileage} onChange={handleInputChange} />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="description">Description</label>
-                        <input type="text" className="form-control" name="description" id="description" value={formData.description} onChange={handleInputChange} />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="availability">Availability</label>
-                        &nbsp;&nbsp;
-                        {formData.availability ? <input type="checkbox" name="availability" id="availability" /> :
-                            <input type="checkbox" name="availability" id="availability" defaultChecked />}
-                    </div>
-                    <input type="hidden" name="vehicleid" value={formData.id} id="vehicleid" />
-                    <input type="hidden" name="standid" value='1' id="standid" />
-                    <input type="hidden" name="brandid" value='1' id="brandid" />
-                    <input type="hidden" name="gastypeid" value='1' id="gastypeid" />
-                    <button type="submit" className="btn btn-primary">Submit</button>
+        <Navbar />
+        <p></p>
+        <div className="container mt-6">
+            <h1>Edit Vehicle</h1>
+            <form onSubmit={handleOnSubmit}>
+                <div className="form-group">
+                    <label htmlFor="brandname">Brand</label>
+                    <input type="text" className="form-control" name="brandname" id="brandname" value={formData.brandname} onChange={handleInputChange} disabled />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="model">Model</label>
+                    <input type="text" className="form-control" name="model" id="model" value={formData.model} onChange={handleInputChange} />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="year">Year</label>
+                    <input type="text" className="form-control" name="year" id="year" value={formData.year} onChange={handleInputChange} />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="price">Price</label>
+                    <input type="text" className="form-control" name="price" id="price" value={formData.price} onChange={handleInputChange} />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="mileage">Mileage</label>
+                    <input type="text" className="form-control" name="mileage" id="mileage" value={formData.mileage} onChange={handleInputChange} />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="description">Description</label>
+                    <input type="text" className="form-control" name="description" id="description" value={formData.description} onChange={handleInputChange} />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="availability">Availability</label>
+                    &nbsp;&nbsp;
+                    {formData.availability ? <input type="checkbox" name="availability" id="availability" /> :
+                        <input type="checkbox" name="availability" id="availability" defaultChecked />}
+                </div>
+                <input type="hidden" name="vehicleid" value={formData.id} id="vehicleid" />
+                <input type="hidden" name="standid" value='1' id="standid" />
+                <input type="hidden" name="brandid" value='1' id="brandid" />
+                <input type="hidden" name="gastypeid" value='1' id="gastypeid" />
+                <button type="submit" className="btn btn-primary">Submit</button>
 
-                </form>
-            </div>
-        </>
+            </form>
+        </div>
     </>
 }
 
