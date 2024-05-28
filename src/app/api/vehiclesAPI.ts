@@ -3,18 +3,17 @@ import { VehicleModel } from "../models/vehicle";
 import { BrandModel } from "../models/brand";
 import { GasTypeModel } from "../models/gastype";
 
-// GasTypes
+// Brands
 export const fetchBrands = async (): Promise<BrandModel[]> => {
     const { data } = await axios.get('http://localhost:3003/brands/')
     return data
 }
 
-// Brands
+// GasTypes
 export const fetchGastype = async (): Promise<GasTypeModel[]> => {
-    const { data } = await axios.get('http://localhost:3003/gastype/')
+    const { data } = await axios.get('http://localhost:3003/gastypes/')
     return data
 }
-
 
 // Vehicles
 export const fetchVehicles = async (): Promise<VehicleModel[]> => {

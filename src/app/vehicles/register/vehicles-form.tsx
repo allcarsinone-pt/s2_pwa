@@ -1,8 +1,15 @@
 
 "use client";
+import { VehicleModel } from "../../models/vehicle";
+import { fetchBrands, fetchGastype, insertVehicles } from "../../api/vehiclesAPI"
+import React, { useEffect, useRef, useState } from "react"
+import { useQuery } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { BrandModel } from "@/app/models/brand";
+import { GasTypeModel } from "@/app/models/gastype";
 
-import { useRef, useState } from "react";
-const InsertVehicles = () => {
+const InsertVehicles: React.FC = () => {
+
   const [dragActive, setDragActive] = useState<boolean>(false);
   const inputRef = useRef<any>(null);
   const [files, setFiles] = useState<any>([]);
@@ -67,84 +74,153 @@ const InsertVehicles = () => {
     inputRef.current.click();
   }
 
+  const [formData, setFormData] = useState<VehicleModel>({
+    id: 0,
+    standid: 0,
+    brandname: "",
+    gastypeid: 0,
+    model: "",
+    year: 0,
+    price: 0,
+    mileage: 0,
+    availability: false,
+    description: ""
+  })
+
+  const { data: brandsData, error: brandsError } = useQuery<BrandModel[]>({
+    queryKey: ['brands' ],
+    queryFn: fetchBrands,
+    staleTime: 10000
+  })
+
+  const { data: gasTypesData, error: gasTypesError } = useQuery<GasTypeModel[]>({
+    queryKey: ['gastypes'],
+    queryFn: fetchGastype,
+    staleTime: 10000
+  })
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value
+    }));
+  }
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    // Converter boolean em string
+    setFormData({
+        ...formData,
+        [name]: value,
+    });
+  };
+
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    // Converter boolean em string
+    setFormData({
+        ...formData,
+        [name]: value
+    });
+  };
+
+  const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+        const updatedFormData = {
+            standid: 1, //formData.standid,
+            brandid: formData.brandid,
+            model: formData.model,
+            year: formData.year,
+            price: formData.price,
+            mileage: formData.mileage,
+            gastypeid: formData.gastypeid,
+            availability: true,
+            description: formData.description
+        };
+        await insertVehicles(updatedFormData);
+        window.location.href = `/vehicles/${formData.id}`;
+    } catch (error) {
+        console.error(error);
+    }
+  }
+
   return (
 
     <div className="container mt-5">
       <h1>Insert vehicle</h1>
 
-      <form method="POST" action="#"
-      onDragEnter={handleDragEnter} 
-      onSubmit={(e) => e.preventDefault()} 
-      onDrop={handleDrop} 
-      onDragLeave={handleDragLeave} 
-      onDragOver={handleDragOver}>
+      <form onSubmit={handleOnSubmit}
+      //onDragEnter={handleDragEnter}  
+      //onDrop={handleDrop} 
+      //onDragLeave={handleDragLeave} 
+      //onDragOver={handleDragOver}
+      >
+
+        <div className="form-group row">
+          <label htmlFor="brands" className="col-sm-2 col-form-label">Brands</label>
+          <div className="col-sm-10">
+            <select id="brandid" name="brandid" className="form-control" value={formData.brandid} onChange={handleSelectChange} >
+              {(brandsData && brandsData.length > 0) ? (
+                brandsData.map((brand) => (
+                  <option key={brand.id} value={brand.id}>{brand.name}</option>
+                ))
+              ) : (
+                <option value="-1">No Brands found</option>
+              )}
+              </select>
+          </div>
+        </div>
 
         <div className="form-group row">
           <label htmlFor="model" className="col-sm-2 col-form-label">Model</label>
           <div className="col-sm-10">
-            <input type="text" name="model" id="model" className="form-control" />
+            <input type="text" name="model" id="model" className="form-control" value={formData.model} onChange={handleInputChange} />
           </div>
         </div>
 
         <div className="form-group row">
           <label htmlFor="year" className="col-sm-2 col-form-label">Year</label>
           <div className="col-sm-10">
-            <input type="number" name="year" id="year" className="form-control" />
-          </div>
-        </div>
-
-        <div className="form-group row">
-          <label htmlFor="mileage" className="col-sm-2 col-form-label">Mileage</label>
-          <div className="col-sm-10">
-            <input type="number" name="mileage" id="mileage" className="form-control" />
+            <input type="number" name="year" id="year" className="form-control" value={formData.year} onChange={handleInputChange} />
           </div>
         </div>
 
         <div className="form-group row">
           <label htmlFor="price" className="col-sm-2 col-form-label">Price</label>
           <div className="col-sm-10">
-            <input type="number" name="price" id="price" className="form-control" />
+            <input type="number" name="price" id="price" className="form-control" value={formData.price} onChange={handleInputChange} />
           </div>
         </div>
         
         <div className="form-group row">
-          <label htmlFor="brand" className="col-sm-2 col-form-label">Brand</label>
+          <label htmlFor="mileage" className="col-sm-2 col-form-label">Mileage</label>
           <div className="col-sm-10">
-            <input type="text" name="brand" id="brand" className="form-control" />
+            <input type="number" name="mileage" id="mileage" className="form-control" value={formData.mileage} onChange={handleInputChange} />
           </div>
         </div>
 
         <div className="form-group row">
           <label htmlFor="gasTypes" className="col-sm-2 col-form-label">Gas type</label>
           <div className="col-sm-10">
-            <select name="gasTypes" id="gasTypes" className="form-control">
-              <option value="Diesel">Diesel</option>
-              <option value="Petrol">Petrol</option>
-              <option value="Electric">Electric</option>
-              <option value="Hybrid">Hybrid</option>
-            </select>
+            <select name="gastypeid" id="gastypeid" className="form-control" value={formData.gastypeid} onChange={handleSelectChange} >
+              {(gasTypesData && gasTypesData.length > 0) ? (
+                gasTypesData.map((gastype) => (
+                  <option key={gastype.id} value={gastype.id}>{gastype.name}</option>
+                ))
+              ) : (
+                <option value="-1">No Gas Types found</option>
+              )}
+              </select>
           </div>
         </div>
 
         <div className="form-group row">
-          <label htmlFor="brands" className="col-sm-2 col-form-label">Brands</label>
-          <div className="col-sm-10">
-            <select id="brands" name="brands" className="form-control">
-              <option value="Audi">Audi</option>
-              <option value="BMW">BMW</option>
-              <option value="Mercedes">Mercedes</option>
-              <option value="Volkswagen">Volkswagen</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="form-group row">
-          <label htmlFor="model" className="col-sm-2 col-form-label">Image</label>
-
-          
+          <label htmlFor="" className="col-sm-2 col-form-label">Image</label>
           <div className="col-sm-10">
           <div className={`${dragActive ? "bg-light" : "bg-body" } form-control text-center flex flex-col`}>
-            <input placeholder="fileInput" className="hidden" ref={inputRef} type="file" multiple={true} onChange={handleChange}
+            <input placeholder="fileInput" className="hidden" ref={inputRef} type="file" multiple={true} onChange={handleChange} 
             accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf" hidden />
             <p>
               Drag & Drop files or{" "}
@@ -171,7 +247,7 @@ const InsertVehicles = () => {
         <div className="form-group row">
           <label htmlFor="description" className="col-sm-2 col-form-label">Description</label>
           <div className="col-sm-10">
-            <textarea name="description" id="description" className="form-control"></textarea>
+            <textarea name="description" id="description" className="form-control" value={formData.description}  onChange={handleTextareaChange} ></textarea>
           </div>
         </div>
 
@@ -185,4 +261,12 @@ const InsertVehicles = () => {
   );
 };
 
-export default InsertVehicles
+const queryClient = new QueryClient();
+
+const VehiclesRegisterPageQueryClient = () => (
+    <QueryClientProvider client={queryClient}>
+        <InsertVehicles />
+    </QueryClientProvider>
+);
+
+export default VehiclesRegisterPageQueryClient
