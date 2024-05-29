@@ -1,9 +1,10 @@
 export interface UserModel {
-    id: number
+    id?: number
     name: string
     username: string
     email: string
     password?: string
+    confirmPassword?: string
     address?: string
     city?: string
     postalcode?: string
