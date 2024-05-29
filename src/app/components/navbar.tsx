@@ -19,11 +19,6 @@ const Navbar = () => {
                         Users
                     </Link>
                 </li>
-                <li className="nav-item">
-                    <Link className="nav-link" href="/testdrives">
-                        Test Drives
-                    </Link>
-                </li>
             </ul>
         </nav>
     );

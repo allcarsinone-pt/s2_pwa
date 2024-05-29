@@ -26,10 +26,21 @@ export const fetchSingleVehicle = async (id: number): Promise<VehicleModel> => {
     return data
 }
 
-export const insertVehicles = async (vehicle: VehicleModel): Promise<VehicleModel> => {
-    const { data } = await axios.post('http://localhost:3003/vehicles/', vehicle)
-    return data
-}
+export const insertVehicles = async (vehicle: VehicleModel, files: File[]): Promise<VehicleModel> => {
+    const formData = new FormData();
+    formData.append('vehicle', JSON.stringify(vehicle));
+    files.forEach((file) => {
+        formData.append('file', file);
+    });
+
+    const { data } = await axios.post('http://localhost:3003/vehicles/', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+
+    return { ...data };
+};
 
 export const updateVehicle = async (vehicle: VehicleModel): Promise<VehicleModel> => {
     const { data } = await axios.put(`http://localhost:3003/vehicles/edit`, vehicle)

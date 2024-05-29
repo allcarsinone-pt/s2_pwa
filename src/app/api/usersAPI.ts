@@ -7,7 +7,7 @@ export const fetchUsers = async (): Promise<UserModel[]> => {
     return data
 }
 
-export const fetchUser = async (username: string): Promise<UserModel> => {
+export const fetchSingleUser = async (username: string): Promise<UserModel> => {
     const { data } = await axios.get('http://localhost:3001/users/' + username)
     return data
 }

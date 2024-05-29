@@ -9,5 +9,5 @@ export interface UserModel {
     postalcode?: string
     mobilephone?: string
     photo?: string
-    role_id: number
+    role_id?: number
 }

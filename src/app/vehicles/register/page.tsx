@@ -24,6 +24,7 @@ const InsertVehicles: React.FC = () => {
     mileage: 0,
     availability: false,
     description: "",
+    files: [],
   });
 
   useEffect(() => {
@@ -52,6 +53,14 @@ const InsertVehicles: React.FC = () => {
     }));
   };
 
+
+  const [files, setFiles] = useState<any>([]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = Array.from(e.target.files || []);
+    setFiles(selectedFiles);
+  };
+
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     // Converter boolean em string
@@ -75,16 +84,18 @@ const InsertVehicles: React.FC = () => {
     try {
       const updatedFormData = {
         standid: 1, //formData.standid, //TODO: Obter valor pelo login. Token?
-        brandid: formData.brandid,
+        brandid: 1,
         model: formData.model,
-        year: formData.year,
-        price: formData.price,
-        mileage: formData.mileage,
-        gastypeid: formData.gastypeid,
+        year: 1,
+        price: 1,
+        mileage: 1,
+        gastypeid: 1,
         availability: true,
         description: formData.description,
+        files: files.map((file: File) => file.name),
       };
-      await insertVehicles(updatedFormData);
+
+      await insertVehicles(updatedFormData, files);
       window.location.href = `/vehicles/${formData.id}`;
     } catch (error) {
       console.error(error);
@@ -93,59 +104,6 @@ const InsertVehicles: React.FC = () => {
 
   const [dragActive, setDragActive] = useState<boolean>(false);
   const inputRef = useRef<any>(null);
-  const [files, setFiles] = useState<any>([]);
-
-  function handleChange(e: any) {
-    e.preventDefault();
-    console.log("File has been added");
-    if (e.target.files?.[0]) {
-      console.log(e.target.files);
-      for (const file of e.target.files) {
-        setFiles((prevState: any) => [...prevState, file]);
-      }
-    }
-  }
-
-  function handleDrop(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    if (e.dataTransfer.files?.[0]) {
-      for (const file of e.dataTransfer.files) {
-        setFiles((prevState: any) => [...prevState, file]);
-      }
-    }
-  }
-
-  function handleDragLeave(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-  }
-
-  function handleDragOver(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(true);
-  }
-
-  function handleDragEnter(e: any) {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(true);
-  }
-
-  function removeFile(fileName: any, idx: any) {
-    const newArr = [...files];
-    newArr.splice(idx, 1);
-    setFiles([]);
-    setFiles(newArr);
-  }
-
-  function openFileExplorer() {
-    inputRef.current.value = "";
-    inputRef.current.click();
-  }
 
   return (
     <>
@@ -156,10 +114,6 @@ const InsertVehicles: React.FC = () => {
 
         <form
           onSubmit={handleOnSubmit}
-          onDragEnter={handleDragEnter}
-          onDrop={handleDrop}
-          onDragLeave={handleDragLeave}
-          onDragOver={handleDragOver}
         >
           <div className="form-group">
             <label htmlFor="brands">Brands</label>
@@ -182,6 +136,7 @@ const InsertVehicles: React.FC = () => {
             </select>
           </div>
 
+          <input name="standid" type="hidden" value="1" />
           <div className="form-group">
             <label htmlFor="model">Model</label>
             <input
@@ -253,53 +208,7 @@ const InsertVehicles: React.FC = () => {
 
           <div className="form-group">
             <label>Image</label>
-            <div
-              className={`${
-                dragActive ? "bg-light" : "bg-body"
-              } form-control text-center flex flex-col`}
-            >
-              <input
-                placeholder="fileInput"
-                className="hidden"
-                ref={inputRef}
-                type="file"
-                multiple={true}
-                onChange={handleChange}
-                accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf"
-                hidden
-              />
-              <p>
-                Drag & Drop files or{" "}
-                <button
-                  onClick={openFileExplorer}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    textDecoration: "underline",
-                    cursor: "pointer",
-                  }}
-                >
-                  Select files
-                </button>{" "}
-                to upload
-              </p>
-              <div className="flex flex-col items-center p-3">
-                {files.map((file: any, idx: any) => (
-                  <div key={file.name} className="flex flex-row space-x-5">
-                    <span>{file.name}</span>{" "}
-                    <button
-                      className="bg-danger"
-                      onClick={() => removeFile(file.name, idx)}
-                      onKeyDown={(e) =>
-                        e.key === "Enter" && removeFile(file.name, idx)
-                      }
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <input type="file" name="files" multiple onChange={handleFileChange} />
           </div>
 
           <div className="form-group">

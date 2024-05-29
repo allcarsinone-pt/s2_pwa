@@ -25,7 +25,8 @@ const VehiclesSinglePage: React.FC = () => {
         price: 0,
         mileage: 0,
         availability: false,
-        description: ""
+        description: "",
+        photos: []
     })
 
     useEffect(() => {
