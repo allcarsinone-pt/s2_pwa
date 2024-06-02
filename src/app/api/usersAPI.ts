@@ -22,7 +22,7 @@ export const editUser = async (user: UserModel): Promise<UserModel> => {
     return data
 }
 
-export const deleteUser = async (username: string): Promise<String> => {
+export const deleteUser = async (username: string): Promise<void> => {
     const { data } = await axios.delete('http://localhost:3001/users/' + username)
     return data
 }

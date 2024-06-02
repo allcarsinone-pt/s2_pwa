@@ -36,8 +36,8 @@ const UsersPage: React.FC = () => {
   const handleDeleteUser = () => {
     if (selectedUser && selectedUser.username) {
       let result = deleteUser(selectedUser.username);
-      console.log(selectedUser.username);
       handleCloseModal();
+      window.location.href = `/users`;
     }
   }
 
@@ -50,6 +50,11 @@ const UsersPage: React.FC = () => {
       <div className="container mt-4">
         <div className="container">
           <h1>Users</h1>
+          <Link href="users/register">
+            <button type="button" className="btn btn-primary">
+              Add User
+            </button>
+          </Link>
         </div>
         <table className="table table-striped">
           <thead>

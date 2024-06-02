@@ -47,7 +47,7 @@ export const updateVehicle = async (vehicle: VehicleModel): Promise<VehicleModel
     return data
 }
 
-export const deleteVehicle = async (id: number): Promise<String> => {
-    const { data } = await axios.delete(`http://localhost:3003/vehicles/${id}`)
-    return data
+export const deleteVehicle = async (id: number): Promise<void> => {
+    console.log(id)
+    await axios.delete(`http://localhost:3003/vehicles/${id}`)
 }

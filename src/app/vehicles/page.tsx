@@ -37,7 +37,8 @@ const VehiclesPage: React.FC = () => {
   };
 
   const handleDeleteVehicle = () => {
-    if (selectedVehicle && selectedVehicle.id) {
+    console.log(selectedVehicle);
+    if (selectedVehicle && selectedVehicle.id && typeof window !== 'undefined') {
       let result = deleteVehicle(selectedVehicle.id);
       handleCloseModal();
       window.location.href = `/vehicles`;
