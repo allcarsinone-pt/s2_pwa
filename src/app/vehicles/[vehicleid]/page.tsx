@@ -26,7 +26,7 @@ const VehiclesSinglePage: React.FC = () => {
         mileage: 0,
         availability: false,
         description: "",
-        photos: []
+        files: []
     })
 
     useEffect(() => {

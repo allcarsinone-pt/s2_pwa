@@ -15,12 +15,10 @@ const VehiclesPage: React.FC = () => {
     import("bootstrap/dist/js/bootstrap");
   }, []);
 
-  const queryClient = useQueryClient();
-
   const { data, error, isLoading } = useQuery<VehicleModel[]>({
     queryKey: ['vehicles'],
     queryFn: fetchVehicles,
-    staleTime: 6000000
+    staleTime: 600000
   });
 
   const [showModal, setShowModal] = useState(false);
@@ -37,8 +35,7 @@ const VehiclesPage: React.FC = () => {
   };
 
   const handleDeleteVehicle = () => {
-    console.log(selectedVehicle);
-    if (selectedVehicle && selectedVehicle.id && typeof window !== 'undefined') {
+    if (selectedVehicle && selectedVehicle.id) {
       let result = deleteVehicle(selectedVehicle.id);
       handleCloseModal();
       window.location.href = `/vehicles`;

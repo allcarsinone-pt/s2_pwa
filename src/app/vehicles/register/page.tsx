@@ -96,7 +96,7 @@ const InsertVehicles: React.FC = () => {
       };
 
       await insertVehicles(updatedFormData, files);
-      window.location.href = `/vehicles/${formData.id}`;
+      window.location.href = `/vehicles`;
     } catch (error) {
       console.error(error);
     }
