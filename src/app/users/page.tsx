@@ -8,10 +8,29 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import AuthProvider from "../AuthProvider";
+import AuthProvider, { useAuth } from "../AuthProvider";
+import { redirect } from "next/navigation";
+import { validateAuth } from "../api/usersAPI";
 const UsersPage: React.FC = () => {
+
+  const user = useAuth();
+  let [username, setUsername] = useState(null);
   useEffect(() => {
     import("bootstrap/dist/js/bootstrap");
+
+    const token = user.isAuthenticated();
+    if (!token) {
+      redirect("/login");
+    }
+
+    validateAuth(token).then((username) => {
+      if (!username) {
+       redirect("/login");
+      }
+
+      setUsername(username.username);
+      console.log(username.username);
+    });
   }, []);
 
   const { data, error, isLoading } = useQuery<UserModel[]>({
@@ -46,7 +65,7 @@ const UsersPage: React.FC = () => {
 
   return <>
     <>
-      <Navbar />
+      <Navbar username={username}/>
       <div className="container mt-4">
         <div className="container">
           <h1>Users</h1>

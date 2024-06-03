@@ -9,6 +9,17 @@ export const login = async(email: String, password: String) => {
     })
     return data
 }
+
+export const validateAuth = async(token: string) => {
+    const { data } = await axios.get('http://localhost:3001/auth', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    return data
+}
+
+
 export const fetchUsers = async (): Promise<UserModel[]> => {
     const { data } = await axios.get('http://localhost:3001/users/')
     return data

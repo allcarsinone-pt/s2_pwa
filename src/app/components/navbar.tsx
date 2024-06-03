@@ -3,7 +3,10 @@ import Image from 'next/image';
 import React from 'react';
 import { signIn } from 'next-auth/react';
 
-const Navbar = () => {
+const Navbar = ({username}) => {
+    let showUsername = null
+    console.log(username)
+    
     return (
         <nav className="navbar navbar-expand-sm bg-dark navbar-dark">
             <a className="navbar-brand" href="#">
@@ -20,8 +23,9 @@ const Navbar = () => {
                         Users
                     </Link>
                 </li>
+
                 <li className="nav-item">
-                <button className='btn btn-primary' onClick={()=> signIn()}></button>
+                    {username && <p className="nav-link">{username}</p>}
                 </li>
             </ul>
             
