@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import React from 'react';
+import { signIn } from 'next-auth/react';
 
 const Navbar = () => {
     return (
@@ -19,7 +20,11 @@ const Navbar = () => {
                         Users
                     </Link>
                 </li>
+                <li className="nav-item">
+                <button className='btn btn-primary' onClick={()=> signIn()}></button>
+                </li>
             </ul>
+            
         </nav>
     );
 };

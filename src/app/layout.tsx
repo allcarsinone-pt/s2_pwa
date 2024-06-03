@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import 'bootstrap/dist/css/bootstrap.css';
+import AuthProvider from "./AuthProvider";
 export const metadata: Metadata = {
   title: "AllCarsIn1",
   description: "Drivin' Your Dreams",
@@ -13,6 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>{children}</body>
+      
     </html>
   );
 }

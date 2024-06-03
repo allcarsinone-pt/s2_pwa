@@ -8,7 +8,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-
+import AuthProvider from "../AuthProvider";
 const UsersPage: React.FC = () => {
   useEffect(() => {
     import("bootstrap/dist/js/bootstrap");
@@ -113,9 +113,11 @@ const UsersPage: React.FC = () => {
 const queryClient = new QueryClient();
 
 const UsersPageQueryClient = () => (
+  <AuthProvider>
   <QueryClientProvider client={queryClient}>
     <UsersPage />
   </QueryClientProvider>
+  </AuthProvider>
 );
 
 export default UsersPageQueryClient

@@ -2,6 +2,13 @@ import axios from "axios";
 import { UserModel } from "../models/user";
 
 
+export const login = async(email: String, password: String) => {
+    const { data } = await axios.post('http://localhost:3001/auth', {
+        email,
+        password
+    })
+    return data
+}
 export const fetchUsers = async (): Promise<UserModel[]> => {
     const { data } = await axios.get('http://localhost:3001/users/')
     return data
