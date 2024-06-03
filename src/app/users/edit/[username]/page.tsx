@@ -6,7 +6,37 @@ import { UserModel } from "../../../models/user";
 import Navbar from "../../../components/navbar";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Link from "next/link";
+import AuthProvider, { useAuth } from "../../../AuthProvider";
+import { redirect } from "next/navigation";
+import { validateAuth } from "../../../api/usersAPI";
 const EditVehiclesPage: React.FC = () => {
+
+
+    const user = useAuth();
+    let [username, setUsername] = useState(null);
+
+    useEffect(() => {
+        import("bootstrap/dist/js/bootstrap");
+
+        const token = user.isAuthenticated();
+        if (!token) {
+            redirect("/login");
+        }
+
+        validateAuth(token).then((username) => {
+            if (!username) {
+                redirect("/login");
+            }
+
+            setUsername(username.username);
+            console.log(username.username);
+        });
+
+        if (userData) {
+            setFormData(userData)
+        }
+
+    }, []);
 
     const { data: userData, error, isLoading } = useQuery<UserModel>({
         queryKey: ['users'],
@@ -20,15 +50,6 @@ const EditVehiclesPage: React.FC = () => {
         email: '',
         role_id: 0
     })
-
-    useEffect(() => {
-
-        
-        if (userData) {
-            setFormData(userData)
-        }
-        import("bootstrap/dist/js/bootstrap");
-    }, [userData]);
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error loading data: {error.message}</div>;
@@ -68,7 +89,7 @@ const EditVehiclesPage: React.FC = () => {
     }
 
     return <>
-        <Navbar />
+        <Navbar username={username} />
         <p></p>
         <div className="container mt-6">
             <h1>Edit User</h1>

@@ -9,10 +9,30 @@ import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+import AuthProvider, { useAuth } from "../AuthProvider";
+import { redirect } from "next/navigation";
+import { validateAuth } from "../api/usersAPI";
 
 const VehiclesPage: React.FC = () => {
+
+  const user = useAuth();
+  let [username, setUsername] = useState(null);
   useEffect(() => {
     import("bootstrap/dist/js/bootstrap");
+
+    const token = user.isAuthenticated();
+    if (!token) {
+      redirect("/login");
+    }
+
+    validateAuth(token).then((username) => {
+      if (!username) {
+        redirect("/login");
+      }
+
+      setUsername(username.username);
+      console.log(username.username);
+    });
   }, []);
 
   const { data, error, isLoading } = useQuery<VehicleModel[]>({
@@ -47,7 +67,7 @@ const VehiclesPage: React.FC = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar username={username} />
       <div className="container mt-4">
         <div className="container">
           <h1>Vehicles</h1>

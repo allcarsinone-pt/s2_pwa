@@ -1,11 +1,35 @@
 "use client";
 import Navbar from "@/app/components/navbar";
 import { UserModel } from "@/app/models/user";
-import { registerUser } from "../../api/usersAPI";
+import { registerUser, validateAuth } from "../../api/usersAPI";
 import React, { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import AuthProvider, { useAuth } from "../../AuthProvider";
+import { redirect } from "next/navigation";
 
 const InsertUser: React.FC = () => {
+
+    const user = useAuth();
+    let [username, setUsername] = useState(null);
+
+    useEffect(() => {
+        import("bootstrap/dist/js/bootstrap");
+
+        const token = user.isAuthenticated();
+        if (!token) {
+            redirect("/login");
+        }
+
+        validateAuth(token).then((username) => {
+            if (!username) {
+                redirect("/login");
+            }
+
+            setUsername(username.username);
+            console.log(username.username);
+        });
+    }, []);
+
     const [formData, setFormData] = useState<UserModel>({
         id: 0,
         name: "",
@@ -15,10 +39,6 @@ const InsertUser: React.FC = () => {
         email: "",
         role_id: 0
     });
-
-    useEffect(() => {
-        import("bootstrap/dist/js/bootstrap");
-    }, []);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -48,7 +68,7 @@ const InsertUser: React.FC = () => {
 
     return (
         <>
-            <Navbar />
+            <Navbar username={username} />
             <div className="container mt-6">
                 <h1>User Register</h1>
                 <form onSubmit={handleOnSubmit}>

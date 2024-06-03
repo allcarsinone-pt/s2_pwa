@@ -6,6 +6,9 @@ import { VehicleModel } from "../../models/vehicle";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Link from "next/link";
 import Navbar from "@/app/components/navbar";
+import AuthProvider, { useAuth } from "../../AuthProvider";
+import { redirect } from "next/navigation";
+import { validateAuth } from "../../api/usersAPI";
 
 const VehiclesSinglePage: React.FC = () => {
 
@@ -14,6 +17,30 @@ const VehiclesSinglePage: React.FC = () => {
         queryFn: () => fetchSingleVehicle(Number(window.location.pathname.split("/").pop())),
         staleTime: 10000
     })
+
+    const user = useAuth();
+    let [username, setUsername] = useState(null);
+    useEffect(() => {
+        import("bootstrap/dist/js/bootstrap");
+
+        const token = user.isAuthenticated();
+        if (!token) {
+            redirect("/login");
+        }
+
+        validateAuth(token).then((username) => {
+            if (!username) {
+                redirect("/login");
+            }
+
+            setUsername(username.username);
+            console.log(username.username);
+        });
+
+        if (vehicleData) {
+            setFormData(vehicleData)
+        }
+    }, [vehicleData]);
 
     const [formData, setFormData] = useState<VehicleModel>({
         id: 0,
@@ -29,19 +56,12 @@ const VehiclesSinglePage: React.FC = () => {
         files: []
     })
 
-    useEffect(() => {
-        if (vehicleData) {
-            setFormData(vehicleData)
-        }
-        import("bootstrap/dist/js/bootstrap");
-    }, [vehicleData]);
-
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error loading data: {error.message}</div>;
 
     return <>
         <>
-            <Navbar />
+            <Navbar username={username} />
             <p></p>
             <div className="container mt-6">
                 <h1>{formData.brandname} {formData.model} Details</h1>

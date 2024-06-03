@@ -11,8 +11,32 @@ import { useQuery } from "@tanstack/react-query";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrandModel } from "@/app/models/brand";
 import { GasTypeModel } from "@/app/models/gastype";
+import AuthProvider, { useAuth } from "../../AuthProvider";
+import { redirect } from "next/navigation";
+import { validateAuth } from "../../api/usersAPI";
 
 const InsertVehicles: React.FC = () => {
+
+  const user = useAuth();
+  let [username, setUsername] = useState(null);
+  useEffect(() => {
+    import("bootstrap/dist/js/bootstrap");
+
+    const token = user.isAuthenticated();
+    if (!token) {
+      redirect("/login");
+    }
+
+    validateAuth(token).then((username) => {
+      if (!username) {
+        redirect("/login");
+      }
+
+      setUsername(username.username);
+      console.log(username.username);
+    });
+  }, []);
+
   const [formData, setFormData] = useState<VehicleModel>({
     id: 0,
     standid: 0,
@@ -26,10 +50,6 @@ const InsertVehicles: React.FC = () => {
     description: "",
     files: [],
   });
-
-  useEffect(() => {
-    import("bootstrap/dist/js/bootstrap");
-  }, []);
 
   const { data: brandsData, error: brandsError } = useQuery<BrandModel[]>({
     queryKey: ["brands"],
@@ -107,7 +127,7 @@ const InsertVehicles: React.FC = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar username={username} />
       <p></p>
       <div className="container mt-6">
         <h1>Insert vehicle</h1>

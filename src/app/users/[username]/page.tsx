@@ -10,8 +10,31 @@ import Navbar from "../../components/navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
+import AuthProvider, { useAuth } from "../../AuthProvider";
+import { redirect } from "next/navigation";
+import { validateAuth } from "../../api/usersAPI";
 
 const UsersSinglePage: React.FC = () => {
+
+    const user = useAuth();
+    let [username, setUsername] = useState(null);
+    useEffect(() => {
+        import("bootstrap/dist/js/bootstrap");
+
+        const token = user.isAuthenticated();
+        if (!token) {
+            redirect("/login");
+        }
+
+        validateAuth(token).then((username) => {
+            if (!username) {
+                redirect("/login");
+            }
+
+            setUsername(username.username);
+            console.log(username.username);
+        });
+    }, []);
 
     const { data: userData, error, isLoading } = useQuery<UserModel>({
         queryKey: ['users'],
@@ -24,7 +47,7 @@ const UsersSinglePage: React.FC = () => {
 
     return <>
         <>
-            <Navbar />
+            <Navbar username={username} />
             <p></p>
             <div className="container mt-6">
                 <h1>{userData?.username} Details</h1>
