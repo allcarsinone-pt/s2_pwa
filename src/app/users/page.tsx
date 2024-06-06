@@ -4,7 +4,7 @@ import Navbar from "../components/navbar";
 import { Query, useQuery } from '@tanstack/react-query';
 import { deleteUser, fetchUsers } from "../api/usersAPI";
 import { UserModel } from "../models/user";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useMutation, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
@@ -25,7 +25,7 @@ const UsersPage: React.FC = () => {
 
     validateAuth(token).then((username) => {
       if (!username) {
-       redirect("/login");
+        redirect("/login");
       }
 
       setUsername(username.username);
@@ -37,6 +37,10 @@ const UsersPage: React.FC = () => {
     queryKey: ['users'],
     queryFn: fetchUsers,
     staleTime: 600000
+  });
+
+  const deleteUserMutation = useMutation({
+    mutationFn: (username: string) => deleteUser(username),
   });
 
   const [showModal, setShowModal] = useState(false);
@@ -52,11 +56,15 @@ const UsersPage: React.FC = () => {
     setShowModal(false);
   };
 
-  const handleDeleteUser = () => {
+  const handleDeleteUser = async () => {
     if (selectedUser && selectedUser.username) {
-      let result = deleteUser(selectedUser.username);
-      handleCloseModal();
-      window.location.href = `/users`;
+      try {
+        await deleteUserMutation(selectedUser.username);
+        queryClient.setQueryData(['users'], (data: UserModel[] | undefined) => data?.filter((user) => user.username !== selectedUser.username));
+        handleCloseModal();
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 
@@ -65,7 +73,7 @@ const UsersPage: React.FC = () => {
 
   return <>
     <>
-      <Navbar username={username}/>
+      <Navbar username={username} />
       <div className="container mt-4">
         <div className="container">
           <h1>Users</h1>
@@ -133,9 +141,9 @@ const queryClient = new QueryClient();
 
 const UsersPageQueryClient = () => (
   <AuthProvider>
-  <QueryClientProvider client={queryClient}>
-    <UsersPage />
-  </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <UsersPage />
+    </QueryClientProvider>
   </AuthProvider>
 );
 

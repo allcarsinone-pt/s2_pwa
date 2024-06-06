@@ -2,6 +2,7 @@ import axios from "axios";
 import { VehicleModel } from "../models/vehicle";
 import { BrandModel } from "../models/brand";
 import { GasTypeModel } from "../models/gastype";
+import { VehicleDetailModel } from "../models/vehicleDetail";
 
 // Brands
 export const fetchBrands = async (): Promise<BrandModel[]> => {
@@ -21,7 +22,7 @@ export const fetchVehicles = async (): Promise<VehicleModel[]> => {
     return data
 }
 
-export const fetchSingleVehicle = async (id: number): Promise<VehicleModel> => {
+export const fetchSingleVehicle = async (id: number): Promise<VehicleDetailModel> => {
     const { data } = await axios.get(`http://localhost:3003/vehicles/${id}`)
     return data
 }

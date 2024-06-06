@@ -9,10 +9,11 @@ import Navbar from "@/app/components/navbar";
 import AuthProvider, { useAuth } from "../../AuthProvider";
 import { redirect } from "next/navigation";
 import { validateAuth } from "../../api/usersAPI";
+import { VehicleDetailModel } from "@/app/models/vehicleDetail";
 
 const VehiclesSinglePage: React.FC = () => {
 
-    const { data: vehicleData, error, isLoading } = useQuery<VehicleModel>({
+    const { data: vehicleData, error, isLoading } = useQuery<VehicleDetailModel>({
         queryKey: ['vehicles'],
         queryFn: () => fetchSingleVehicle(Number(window.location.pathname.split("/").pop())),
         staleTime: 10000
@@ -42,19 +43,22 @@ const VehiclesSinglePage: React.FC = () => {
         }
     }, [vehicleData]);
 
-    const [formData, setFormData] = useState<VehicleModel>({
+    const [formData, setFormData] = useState<VehicleDetailModel>({
         id: 0,
+        vehicleid: 0,
         standid: 0,
         brandname: "",
+        brandid: 0,
+        gastypename: "",
         gastypeid: 0,
         model: "",
         year: 0,
         price: 0,
         mileage: 0,
-        availability: false,
+        availability: true,
         description: "",
-        files: []
-    })
+        photos: [],
+    });
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error loading data: {error.message}</div>;
@@ -66,6 +70,16 @@ const VehiclesSinglePage: React.FC = () => {
             <div className="container mt-6">
                 <h1>{formData.brandname} {formData.model} Details</h1>
                 <form>
+                    <h1></h1>
+                    {formData.photos && formData.photos.length > 0 && (
+                        <>
+                            {formData.photos.map((photo, index) => (
+                                <div key={index}>
+                                    <img src={photo} alt={`Photo ${index + 1}`} />
+                                </div>
+                            ))}
+                        </>
+                    )}
                     <div className="form-group">
                         <label htmlFor="brandname">Brand</label>
                         <input type="text" className="form-control" name="brandname" id="brandname" value={formData.brandname} disabled />
