@@ -46,7 +46,8 @@ const EditVehiclesPage: React.FC = () => {
         price: 0,
         mileage: 0,
         availability: false,
-        description: ""
+        description: "",
+        consume: 0
     })
 
     if (isLoading) return <div>Loading...</div>;
