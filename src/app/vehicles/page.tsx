@@ -12,6 +12,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import AuthProvider, { useAuth } from "../AuthProvider";
 import { redirect } from "next/navigation";
 import { validateAuth } from "../api/usersAPI";
+import { verifyAuth } from "../api/utils/utils";
 
 const VehiclesPage: React.FC = () => {
 
@@ -20,16 +21,7 @@ const VehiclesPage: React.FC = () => {
   useEffect(() => {
     import("bootstrap/dist/js/bootstrap");
 
-    const token = user.isAuthenticated();
-    if (!token) {
-      redirect("/login");
-    }
-
-    validateAuth(token).then((username) => {
-      if (!username) {
-        redirect("/login");
-      }
-
+    verifyAuth(user, (username:any) => {
       setUsername(username.username);
       console.log(username.username);
     });

@@ -9,11 +9,13 @@ import Link from "next/link";
 import AuthProvider, { useAuth } from "../../../AuthProvider";
 import { redirect } from "next/navigation";
 import { validateAuth } from "../../../api/usersAPI";
+import { verifyAuth } from "@/app/api/utils/utils";
+import { VehicleDetailModel } from "@/app/models/vehicleDetail";
 
 const EditVehiclesPage: React.FC = () => {
 
 
-    const { data: vehicleData, error, isLoading } = useQuery<VehicleModel>({
+    const { data: vehicleData, error, isLoading } = useQuery<VehicleDetailModel>({
         queryKey: ['vehicles'],
         queryFn: () => fetchSingleVehicle(Number(window.location.pathname.split("/").pop()))
     })
@@ -23,19 +25,10 @@ const EditVehiclesPage: React.FC = () => {
     useEffect(() => {
         import("bootstrap/dist/js/bootstrap");
 
-        const token = user.isAuthenticated();
-        if (!token) {
-            redirect("/login");
-        }
-
-        validateAuth(token).then((username) => {
-            if (!username) {
-                redirect("/login");
-            }
-
+        verifyAuth(user, (username:any) => {
             setUsername(username.username);
             console.log(username.username);
-        });
+          });
 
         if (vehicleData) {
             setFormData(vehicleData)
@@ -43,7 +36,7 @@ const EditVehiclesPage: React.FC = () => {
     }, [vehicleData]);
 
 
-    const [formData, setFormData] = useState<VehicleModel>({
+    const [formData, setFormData] = useState<VehicleDetailModel>({
         id: 0,
         standid: 0,
         brandname: "",

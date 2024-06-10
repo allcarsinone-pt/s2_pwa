@@ -9,6 +9,7 @@ import Link from "next/link";
 import AuthProvider, { useAuth } from "../../../AuthProvider";
 import { redirect } from "next/navigation";
 import { validateAuth } from "../../../api/usersAPI";
+import { verifyAuth } from "@/app/api/utils/utils";
 const EditVehiclesPage: React.FC = () => {
 
 
@@ -18,19 +19,10 @@ const EditVehiclesPage: React.FC = () => {
     useEffect(() => {
         import("bootstrap/dist/js/bootstrap");
 
-        const token = user.isAuthenticated();
-        if (!token) {
-            redirect("/login");
-        }
-
-        validateAuth(token).then((username) => {
-            if (!username) {
-                redirect("/login");
-            }
-
+        verifyAuth(user, (username:any) => {
             setUsername(username.username);
             console.log(username.username);
-        });
+          });
 
         if (userData) {
             setFormData(userData)

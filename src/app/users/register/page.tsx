@@ -6,7 +6,8 @@ import React, { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AuthProvider, { useAuth } from "../../AuthProvider";
 import { redirect } from "next/navigation";
-
+import { verifyAuth } from "@/app/api/utils/utils";
+verifyAuth
 const InsertUser: React.FC = () => {
 
     const user = useAuth();
@@ -15,19 +16,10 @@ const InsertUser: React.FC = () => {
     useEffect(() => {
         import("bootstrap/dist/js/bootstrap");
 
-        const token = user.isAuthenticated();
-        if (!token) {
-            redirect("/login");
-        }
-
-        validateAuth(token).then((username) => {
-            if (!username) {
-                redirect("/login");
-            }
-
+        verifyAuth(user, (username:any) => {
             setUsername(username.username);
             console.log(username.username);
-        });
+          });
     }, []);
 
     const [formData, setFormData] = useState<UserModel>({

@@ -10,6 +10,7 @@ import AuthProvider, { useAuth } from "../../AuthProvider";
 import { redirect } from "next/navigation";
 import { validateAuth } from "../../api/usersAPI";
 import { VehicleDetailModel } from "@/app/models/vehicleDetail";
+import { verifyAuth } from "@/app/api/utils/utils";
 
 const VehiclesSinglePage: React.FC = () => {
 
@@ -24,19 +25,10 @@ const VehiclesSinglePage: React.FC = () => {
     useEffect(() => {
         import("bootstrap/dist/js/bootstrap");
 
-        const token = user.isAuthenticated();
-        if (!token) {
-            redirect("/login");
-        }
-
-        validateAuth(token).then((username) => {
-            if (!username) {
-                redirect("/login");
-            }
-
+        verifyAuth(user, (username:any) => {
             setUsername(username.username);
             console.log(username.username);
-        });
+          });
 
         if (vehicleData) {
             setFormData(vehicleData)

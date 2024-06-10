@@ -11,6 +11,7 @@ import Link from "next/link";
 import AuthProvider, { useAuth } from "../AuthProvider";
 import { redirect } from "next/navigation";
 import { validateAuth } from "../api/usersAPI";
+import { verifyAuth } from "../api/utils/utils";
 const UsersPage: React.FC = () => {
 
   const user = useAuth();
@@ -18,16 +19,7 @@ const UsersPage: React.FC = () => {
   useEffect(() => {
     import("bootstrap/dist/js/bootstrap");
 
-    const token = user.isAuthenticated();
-    if (!token) {
-      redirect("/login");
-    }
-
-    validateAuth(token).then((username) => {
-      if (!username) {
-        redirect("/login");
-      }
-
+    verifyAuth(user, (username:any) => {
       setUsername(username.username);
       console.log(username.username);
     });
@@ -59,7 +51,7 @@ const UsersPage: React.FC = () => {
   const handleDeleteUser = async () => {
     if (selectedUser && selectedUser.username) {
       try {
-        await deleteUserMutation(selectedUser.username);
+        //await deleteUserMutation(selectedUser.username);
         queryClient.setQueryData(['users'], (data: UserModel[] | undefined) => data?.filter((user) => user.username !== selectedUser.username));
         handleCloseModal();
       } catch (error) {

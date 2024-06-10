@@ -14,24 +14,14 @@ import { GasTypeModel } from "@/app/models/gastype";
 import AuthProvider, { useAuth } from "../../AuthProvider";
 import { redirect } from "next/navigation";
 import { validateAuth } from "../../api/usersAPI";
-
+import { verifyAuth } from "@/app/api/utils/utils";
 const InsertVehicles: React.FC = () => {
 
   const user = useAuth();
   let [username, setUsername] = useState(null);
   useEffect(() => {
     import("bootstrap/dist/js/bootstrap");
-
-    const token = user.isAuthenticated();
-    if (!token) {
-      redirect("/login");
-    }
-
-    validateAuth(token).then((username) => {
-      if (!username) {
-        redirect("/login");
-      }
-
+    verifyAuth(user, (username:any) => {
       setUsername(username.username);
       console.log(username.username);
     });
@@ -48,6 +38,7 @@ const InsertVehicles: React.FC = () => {
     mileage: 0,
     availability: false,
     description: "",
+    consume: 0,
     files: [],
   });
 
@@ -83,6 +74,7 @@ const InsertVehicles: React.FC = () => {
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
+    console.log(name, value);
     // Converter boolean em string
     setFormData({
       ...formData,
@@ -102,18 +94,24 @@ const InsertVehicles: React.FC = () => {
   const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+
+      
+      
       const updatedFormData = {
         standid: 1, //formData.standid, //TODO: Obter valor pelo login. Token?
-        brandid: 1,
+        brandid: formData.brandid?formData.brandid:1,
         model: formData.model,
-        year: 1,
-        price: 1,
-        mileage: 1,
-        gastypeid: 1,
+        year: formData.year,
+        price: formData.price,
+        mileage: formData.mileage,
+        gastypeid: formData.gastypeid?formData.gastypeid:1,
         availability: true,
+        consume: formData.consume,
         description: formData.description,
         files: files.map((file: File) => file.name),
-      };
+      }
+
+      console.log(updatedFormData);
 
       await insertVehicles(updatedFormData, files);
       window.location.href = `/vehicles`;
@@ -208,10 +206,10 @@ const InsertVehicles: React.FC = () => {
           <div className="form-group">
             <label htmlFor="gasTypes">Gas type</label>
             <select
-              name="gastypeid"
               id="gastypeid"
+              name="gastypeid"
               className="form-control"
-              value={formData.gastypeid}
+              value={formData.brandid}
               onChange={handleSelectChange}
             >
               {gasTypesData && gasTypesData.length > 0 ? (
@@ -221,11 +219,22 @@ const InsertVehicles: React.FC = () => {
                   </option>
                 ))
               ) : (
-                <option value="-1">No Gas Types found</option>
+                <option value="-1">No Gastypes found</option>
               )}
             </select>
           </div>
-
+          
+          <div className="form-group">
+            <label htmlFor="consume" >Consume</label>
+            <input
+              type="number"
+              name="consume"
+              id="consume"
+              className="form-control"
+              value={formData.consume}
+              onChange={handleInputChange}
+            />
+          </div>
           <div className="form-group">
             <label>Image</label>
             <input type="file" name="files" multiple onChange={handleFileChange} />

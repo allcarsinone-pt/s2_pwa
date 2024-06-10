@@ -11,6 +11,7 @@ export interface VehicleModel {
     price: number;
     mileage: number;
     availability: boolean;
+    consume: number;
     description: string;
     files?: string[];
 }

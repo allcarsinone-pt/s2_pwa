@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import AuthProvider, { useAuth } from "../../AuthProvider";
 import { redirect } from "next/navigation";
 import { validateAuth } from "../../api/usersAPI";
-
+import { verifyAuth } from "@/app/api/utils/utils";
 const UsersSinglePage: React.FC = () => {
 
     const user = useAuth();
@@ -21,19 +21,10 @@ const UsersSinglePage: React.FC = () => {
     useEffect(() => {
         import("bootstrap/dist/js/bootstrap");
 
-        const token = user.isAuthenticated();
-        if (!token) {
-            redirect("/login");
-        }
-
-        validateAuth(token).then((username) => {
-            if (!username) {
-                redirect("/login");
-            }
-
+        verifyAuth(user, (username:any) => {
             setUsername(username.username);
             console.log(username.username);
-        });
+          });
     }, []);
 
     const { data: userData, error, isLoading } = useQuery<UserModel>({
