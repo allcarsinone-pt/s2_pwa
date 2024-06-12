@@ -8,6 +8,7 @@ export interface VehicleDetailModel {
     gastypeid?: number;
     model: string;
     year: number;
+    location?: string;
     price: number;
     mileage: number;
     consume: number;

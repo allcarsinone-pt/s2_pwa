@@ -79,7 +79,7 @@ const VehiclesSinglePage: React.FC = () => {
                             {formData.photos && formData.photos.length > 0 && (
                                 formData.photos.map((photo, index) => (
                                     <div key={index} className={`carousel-item ${activeSlide === index ? 'active' : ''}`}>
-                                        <img src={`http://localhost:8080${photo.url.replace('src/static', '')}`} alt={`Photo ${index + 1}`} width={1000} height={500} />
+                                        <img src={`http://allcarsinone.pt:8080${photo.url.replace('src/static', '')}`} alt={`Photo ${index + 1}`} width={1000} height={500} />
                                     </div>
                                 ))
                             )}

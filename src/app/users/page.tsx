@@ -33,6 +33,9 @@ const UsersPage: React.FC = () => {
 
   const deleteUserMutation = useMutation({
     mutationFn: (username: string) => deleteUser(username),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    }
   });
 
   const [showModal, setShowModal] = useState(false);
@@ -51,7 +54,7 @@ const UsersPage: React.FC = () => {
   const handleDeleteUser = async () => {
     if (selectedUser && selectedUser.username) {
       try {
-        //await deleteUserMutation(selectedUser.username);
+        await deleteUserMutation.mutateAsync(selectedUser.username);
         queryClient.setQueryData(['users'], (data: UserModel[] | undefined) => data?.filter((user) => user.username !== selectedUser.username));
         handleCloseModal();
       } catch (error) {

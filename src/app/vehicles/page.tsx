@@ -36,6 +36,12 @@ const VehiclesPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState<VehicleModel | null>(null);
 
+  const deleteVehicleMutation = useMutation({
+    mutationFn: (id: number) => deleteVehicle(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['vehicles'] });
+    }
+  });
   const handleOpenModal = (vehicle: VehicleModel | null) => {
     setSelectedVehicle(vehicle);
     setShowModal(true);
@@ -48,9 +54,8 @@ const VehiclesPage: React.FC = () => {
 
   const handleDeleteVehicle = () => {
     if (selectedVehicle && selectedVehicle.id) {
-      let result = deleteVehicle(selectedVehicle.id);
+      deleteVehicleMutation.mutate(selectedVehicle.id);
       handleCloseModal();
-      window.location.href = `/vehicles`;
     }
   }
 

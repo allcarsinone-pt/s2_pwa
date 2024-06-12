@@ -39,6 +39,7 @@ const InsertVehicles: React.FC = () => {
     availability: false,
     description: "",
     consume: 0,
+    location: "",
     files: [],
   });
 
@@ -108,6 +109,7 @@ const InsertVehicles: React.FC = () => {
         availability: true,
         consume: formData.consume,
         description: formData.description,
+        location: formData.location,
         files: files.map((file: File) => file.name),
       }
 
@@ -178,6 +180,17 @@ const InsertVehicles: React.FC = () => {
               onChange={handleInputChange}
             />
           </div>
+          <div className="form-group">
+            <label htmlFor="year">Location</label>
+            <input
+              type="text"
+              name="location"
+              id="location"
+              className="form-control"
+              value={formData.location}
+              onChange={handleInputChange}
+            />
+          </div>
 
           <div className="form-group">
             <label htmlFor="price" >Price</label>
@@ -209,7 +222,7 @@ const InsertVehicles: React.FC = () => {
               id="gastypeid"
               name="gastypeid"
               className="form-control"
-              value={formData.brandid}
+              value={formData.gastypeid}
               onChange={handleSelectChange}
             >
               {gasTypesData && gasTypesData.length > 0 ? (

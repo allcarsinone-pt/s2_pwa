@@ -10,6 +10,7 @@ export interface VehicleModel {
     year: number;
     price: number;
     mileage: number;
+    location?:string;
     availability: boolean;
     consume: number;
     description: string;

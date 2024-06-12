@@ -31,7 +31,6 @@ const AuthProvider = ({ children }) => {
     };
 
     const logOut = () => {
-        setToken(null);
         localStorage.removeItem("token");
         window.location.href = "/login";
     };
