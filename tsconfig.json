@@ -32,7 +32,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/page.js"
+    "src/app/page.tsx"
 , "src/app/AuthProvider.js"  ],
   "exclude": [
     "node_modules"

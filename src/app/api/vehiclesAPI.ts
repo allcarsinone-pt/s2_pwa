@@ -3,6 +3,7 @@ import { VehicleModel } from "../models/vehicle";
 import { BrandModel } from "../models/brand";
 import { GasTypeModel } from "../models/gastype";
 import { VehicleDetailModel } from "../models/vehicleDetail";
+import { StatsModel } from "../models/stats";
 
 // Brands
 export const fetchBrands = async (): Promise<BrandModel[]> => {
@@ -55,7 +56,7 @@ export const deleteVehicle = async (id: number): Promise<void> => {
 }
 
 // Stand sales
-export const standSales = async (standid: number): Promise<any> => {
-    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_API_VEHICLES}/stands/stats/` + standid)
+export const standSales = async (standid: number): Promise<StatsModel> => {
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_API_VEHICLES}/vehicles/stands/stats/` + standid)
     return data
 }
