@@ -43,7 +43,7 @@ export const insertVehicles = async (vehicle: VehicleModel, files: File[]): Prom
     return { ...data };
 };
 
-export const updateVehicle = async (vehicle: VehicleModel, id:number): Promise<VehicleModel> => {
+export const updateVehicle = async (vehicle: VehicleModel, id: number): Promise<VehicleModel> => {
     console.log(id)
     const { data } = await axios.put(`${process.env.NEXT_PUBLIC_SERVER_API_VEHICLES}/vehicles/${id}`, vehicle)
     return data
@@ -52,4 +52,10 @@ export const updateVehicle = async (vehicle: VehicleModel, id:number): Promise<V
 export const deleteVehicle = async (id: number): Promise<void> => {
     console.log(id)
     await axios.delete(`${process.env.NEXT_PUBLIC_SERVER_API_VEHICLES}/vehicles/` + id)
+}
+
+// Stand sales
+export const standSales = async (standid: number): Promise<any> => {
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_API_VEHICLES}/stands/stats/` + standid)
+    return data
 }
