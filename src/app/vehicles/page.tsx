@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
-import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { deleteVehicle, fetchVehicles } from "../api/vehiclesAPI";
+import { keepPreviousData, useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { deleteVehicle, fetchVehicles, fetchVehiclesPaginated } from "../api/vehiclesAPI";
 import { VehicleModel } from "../models/vehicle";
 import Navbar from "../components/navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,18 +18,23 @@ const VehiclesPage: React.FC = () => {
 
   const user = useAuth();
   let [username, setUsername] = useState(null);
+  const [page, setPage] = useState(1);
+  const prevPage = () => setPage((prev) => prev - 1);
+  const nextPage = () => setPage((next) => next + 1);
+
   useEffect(() => {
     import("bootstrap/dist/js/bootstrap");
 
-    verifyAuth(user, (username:any) => {
+    verifyAuth(user, (username: any) => {
       setUsername(username.username);
       console.log(username.username);
     });
   }, []);
 
-  const { data, error, isLoading } = useQuery<VehicleModel[]>({
-    queryKey: ['vehicles'],
-    queryFn: fetchVehicles,
+  const { isLoading, isError, error, data, isPlaceholderData } = useQuery<VehicleModel[]>({
+    queryKey: ['vehicles', page],
+    queryFn: () => fetchVehiclesPaginated(page),
+    placeholderData: keepPreviousData,
     staleTime: 600000
   });
 
@@ -112,6 +117,21 @@ const VehiclesPage: React.FC = () => {
               )}
           </tbody>
         </table>
+
+
+        <span>Current Page: {page}&nbsp;&nbsp;</span>
+        <button
+          onClick={() => setPage((old) => Math.max(old - 1, 0))}
+          disabled={page === 1}>{'  <  '}</button>{' '}
+        <button
+          onClick={() => {
+            if (!isPlaceholderData && data && data.length > 0) {
+              setPage((old) => old + 1)
+            }
+          }}
+          disabled={isPlaceholderData || !data || (data && data.length === 0)}
+        > {'  >  '}
+        </button>
       </div>
 
       <div className={`modal fade ${showModal ? 'show' : ''}`} style={{ display: showModal ? 'block' : 'none' }} role="dialog">

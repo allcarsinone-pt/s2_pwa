@@ -72,9 +72,7 @@ const VehiclesSinglePage: React.FC = () => {
             <div className="container mt-6">
                 <h1>{formData.brandname} {formData.model} Details</h1>
                 <form>
-                    <h1></h1>
-
-                    <div id="carouselExampleControls" className="carousel slide" data-ride="carousel">
+                    <div id="carouselExampleControls" className="carousel slide" style={{ width: "70%", backgroundColor: "#202428" }} data-ride="carousel">
                         <div className="carousel-inner">
                             {formData.photos && formData.photos.length > 0 && (
                                 formData.photos.map((photo, index) => (
@@ -87,11 +85,11 @@ const VehiclesSinglePage: React.FC = () => {
 
                         <a className="carousel-control-prev" role="button" data-slide="prev" onClick={handlePrevClick}>
                             <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span className="sr-only">Previous</span>
+                            <span className="sr-only color-controls">Previous</span>
                         </a>
                         <a className="carousel-control-next" role="button" data-slide="next" onClick={handleNextClick}>
+                            <span className="sr-only color-controls">Next</span>
                             <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span className="sr-only">Next</span>
                         </a>
                     </div>
 

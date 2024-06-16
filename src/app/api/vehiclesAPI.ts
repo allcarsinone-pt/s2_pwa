@@ -23,6 +23,11 @@ export const fetchVehicles = async (): Promise<VehicleModel[]> => {
     return data
 }
 
+export const fetchVehiclesPaginated = async (page: number): Promise<VehicleModel[]> => {
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_API_VEHICLES}/vehicles/pagination/${page}`)
+    return data
+}
+
 export const fetchSingleVehicle = async (id: number): Promise<VehicleDetailModel> => {
     const { data } = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_API_VEHICLES}/vehicles/${id}`)
     return data
